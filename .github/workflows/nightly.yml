@@ -21,8 +21,11 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - run: |
         NGINX_VERSION=$(podman run --rm korijn/nginx-brotli:latest bash -c "echo \$NGINX_VERSION")
+        echo $NGINX_VERSION
         NGINX_VERSION_MAJMIN=$(printf '%s' "NGINX_VERSION" | sed -r 's/([0-9]+)\.([0-9]+)\.([0-9]+)/\1.\2/g')
+        echo $NGINX_VERSION_MAJMIN
         NGINX_VERSION_MAJ=$(printf '%s' "NGINX_VERSION" | sed -r 's/([0-9]+)\.([0-9]+)\.([0-9]+)/\1/g')
+        echo $NGINX_VERSION_MAJ
         podman tag korijn/nginx-brotli:latest korijn/nginx-brotli:$NGINX_VERSION
         podman tag korijn/nginx-brotli:latest korijn/nginx-brotli:$NGINX_VERSION_MAJMIN
         podman tag korijn/nginx-brotli:latest korijn/nginx-brotli:$NGINX_VERSION_MAJ
