@@ -20,7 +20,7 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - run: |
-        NGINX_VERSION=$(podman run --rm korijn/nginx-brotli:latest echo $$NGINX_VERSION)
+        NGINX_VERSION=$(podman run --rm korijn/nginx-brotli:latest bash -c "echo \$NGINX_VERSION")
         podman tag korijn/nginx-brotli:latest korijn/nginx-brotli:$NGINX_VERSION
         podman tag korijn/nginx-brotli:alpine korijn/nginx-brotli:$NGINX_VERSION-alpine
         podman push korijn/nginx-brotli:latest
