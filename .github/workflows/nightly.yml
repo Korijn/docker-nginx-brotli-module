@@ -11,7 +11,9 @@ jobs:
       with:
         repository: 'nginxinc/docker-nginx'
         path: docker-nginx
-    - run: podman build --build-arg ENABLED_MODULES="brotli" -t korijn/nginx-brotli:latest -f Dockerfile.alpine .
+    - run: podman build --build-arg ENABLED_MODULES="brotli" -t korijn/nginx-brotli:latest -f Dockerfile .
+      working-directory: docker-nginx/modules
+    - run: podman build --build-arg ENABLED_MODULES="brotli" -t korijn/nginx-brotli:alpine -f Dockerfile.alpine .
       working-directory: docker-nginx/modules
     - uses: docker/login-action@v1
       with:
@@ -19,6 +21,9 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - run: |
         NGINX_VERSION=$(podman run --rm -ti korijn/nginx-brotli:latest echo $NGINX_VERSION)
-        podman tag korijn/nginx-brotli:latest korijn/nginx-brotli:$NGINX_VERSION-alpine
-        podman push korijn/nginx-brotli:$NGINX_VERSION-alpine
+        podman tag korijn/nginx-brotli:latest korijn/nginx-brotli:$NGINX_VERSION
+        podman tag korijn/nginx-brotli:alpine korijn/nginx-brotli:$NGINX_VERSION-alpine
         podman push korijn/nginx-brotli:latest
+        podman push korijn/nginx-brotli:$NGINX_VERSION
+        podman push korijn/nginx-brotli:alpine
+        podman push korijn/nginx-brotli:$NGINX_VERSION-alpine
