@@ -6,10 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
+    - run: git clone https://github.com/nginxinc/docker-nginx.git
     - run: |
+        cd docker-nginx/modules
         podman build --build-arg ENABLED_MODULES="brotli" -t korijn/docker-nginx-brotli:latest .

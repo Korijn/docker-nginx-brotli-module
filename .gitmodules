@@ -1,3 +1,0 @@
-[submodule "docker-nginx"]
-	path = docker-nginx
-	url = https://github.com/nginxinc/docker-nginx
