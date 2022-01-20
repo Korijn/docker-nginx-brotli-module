@@ -7,7 +7,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - run: git clone https://github.com/nginxinc/docker-nginx.git
-    - run: |
-        cd docker-nginx/modules
-        podman build --build-arg ENABLED_MODULES="brotli" -t korijn/docker-nginx-brotli:latest .
+    - uses: actions/checkout@v2
+      with:
+        repository: 'nginxinc/docker-nginx'
+        path: docker-nginx
+    - run: podman build --build-arg ENABLED_MODULES="brotli" -t korijn/nginx-brotli:latest .
+      working-directory: docker-nginx/modules
+    - uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - run: podman push korijn/nginx-brotli:latest
+    
