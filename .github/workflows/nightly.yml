@@ -21,9 +21,19 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - run: |
         NGINX_VERSION=$(podman run --rm korijn/nginx-brotli:latest bash -c "echo \$NGINX_VERSION")
+        NGINX_VERSION_MAJMIN=$(printf '%s' "NGINX_VERSION" | sed -r 's/([0-9]+)\.([0-9]+)\.([0-9]+)/\1.\2/g')
+        NGINX_VERSION_MAJ=$(printf '%s' "NGINX_VERSION" | sed -r 's/([0-9]+)\.([0-9]+)\.([0-9]+)/\1/g')
         podman tag korijn/nginx-brotli:latest korijn/nginx-brotli:$NGINX_VERSION
+        podman tag korijn/nginx-brotli:latest korijn/nginx-brotli:$NGINX_VERSION_MAJMIN
+        podman tag korijn/nginx-brotli:latest korijn/nginx-brotli:$NGINX_VERSION_MAJ
         podman tag korijn/nginx-brotli:alpine korijn/nginx-brotli:$NGINX_VERSION-alpine
+        podman tag korijn/nginx-brotli:alpine korijn/nginx-brotli:$NGINX_VERSION_MAJMIN-alpine
+        podman tag korijn/nginx-brotli:alpine korijn/nginx-brotli:$NGINX_VERSION_MAJ-alpine
         podman push korijn/nginx-brotli:latest
         podman push korijn/nginx-brotli:$NGINX_VERSION
+        podman push korijn/nginx-brotli:$NGINX_VERSION_MAJMIN
+        podman push korijn/nginx-brotli:$NGINX_VERSION_MAJ
         podman push korijn/nginx-brotli:alpine
         podman push korijn/nginx-brotli:$NGINX_VERSION-alpine
+        podman push korijn/nginx-brotli:$NGINX_VERSION_MAJMIN-alpine
+        podman push korijn/nginx-brotli:$NGINX_VERSION_MAJ-alpine
